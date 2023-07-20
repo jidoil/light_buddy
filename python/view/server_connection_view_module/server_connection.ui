@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>908</width>
-    <height>567</height>
+    <width>916</width>
+    <height>573</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -113,11 +113,6 @@ background-color: rgb(77, 89, 69);</string>
           </attribute>
           <column>
            <property name="text">
-            <string>server</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
             <string>project</string>
            </property>
           </column>
@@ -141,6 +136,11 @@ background-color: rgb(77, 89, 69);</string>
             <string>artists</string>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>deadlines</string>
+           </property>
+          </column>
          </widget>
          <widget class="QPushButton" name="log_in_button">
           <property name="geometry">
@@ -148,7 +148,7 @@ background-color: rgb(77, 89, 69);</string>
             <x>760</x>
             <y>430</y>
             <width>131</width>
-            <height>61</height>
+            <height>71</height>
            </rect>
           </property>
           <property name="text">
@@ -172,7 +172,7 @@ background-color: rgb(77, 89, 69);</string>
           <property name="geometry">
            <rect>
             <x>640</x>
-            <y>460</y>
+            <y>470</y>
             <width>113</width>
             <height>28</height>
            </rect>
@@ -194,47 +194,18 @@ background-color: rgb(77, 89, 69);</string>
            <bool>false</bool>
           </property>
          </widget>
-         <widget class="QLabel" name="log_in_info_label_2">
-          <property name="geometry">
-           <rect>
-            <x>570</x>
-            <y>440</y>
-            <width>61</width>
-            <height>20</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>ID</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-         <widget class="QLabel" name="log_in_info_label_3">
-          <property name="geometry">
-           <rect>
-            <x>550</x>
-            <y>470</y>
-            <width>81</width>
-            <height>20</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>PASSWORD</string>
-          </property>
-         </widget>
         </widget>
-        <widget class="QWidget" name="scene_tab">
+        <widget class="QWidget" name="tasks_tab">
          <attribute name="title">
-          <string>Scenes</string>
+          <string>Tasks</string>
          </attribute>
          <widget class="QPushButton" name="import_assets_button">
           <property name="geometry">
            <rect>
             <x>770</x>
             <y>440</y>
-            <width>111</width>
-            <height>51</height>
+            <width>121</width>
+            <height>61</height>
            </rect>
           </property>
           <property name="text">
@@ -244,10 +215,10 @@ background-color: rgb(77, 89, 69);</string>
          <widget class="QPushButton" name="sync_all_assets_button">
           <property name="geometry">
            <rect>
-            <x>650</x>
+            <x>640</x>
             <y>440</y>
-            <width>111</width>
-            <height>51</height>
+            <width>121</width>
+            <height>61</height>
            </rect>
           </property>
           <property name="text">
@@ -420,8 +391,8 @@ background-color: rgb(77, 89, 69);</string>
            <rect>
             <x>770</x>
             <y>440</y>
-            <width>111</width>
-            <height>51</height>
+            <width>121</width>
+            <height>61</height>
            </rect>
           </property>
           <property name="text">
@@ -465,7 +436,7 @@ background-color: rgb(77, 89, 69);</string>
             <x>780</x>
             <y>440</y>
             <width>111</width>
-            <height>51</height>
+            <height>61</height>
            </rect>
           </property>
           <property name="text">

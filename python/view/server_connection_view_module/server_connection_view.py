@@ -22,6 +22,7 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
             self.server_list_view.insertRow(project_index)
             for element_index_in_project, (_, element_value) in enumerate(project.items()):
                 item = QTableWidgetItem(str(element_value))
+                item.setTextAlignment(Qt.AlignCenter)
                 self.server_list_view.setItem(project_index, element_index_in_project, item)
 
 
