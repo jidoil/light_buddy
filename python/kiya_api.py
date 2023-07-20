@@ -11,7 +11,7 @@ __version__ = "0.0.1"
 import gazu
 
 from model.server_connection_model import *
-from python.controllers.server_view_controller import ServerConnetionController
+from controllers.server_view_controller import ServerConnetionController
 from validations.properties import *
 from view.server_connection_view_module.server_connection_view import ServerConnectionView
 
@@ -24,7 +24,7 @@ class KiyaAPI:
     _asset_types = []
 
     def __init__(self,
-                 address: str = "https://c93b-1-11-90-40.ngrok-free.app/api",  # 주의: ngrok 리셋마다 주소가 바뀜
+                 address: str = "https://9543-1-11-90-40.ngrok-free.app/api",  # 주의: ngrok 리셋마다 주소가 바뀜
                  id: str = "admin@netflixacademy.com",
                  password: str = "netflixacademy"
         ):
@@ -34,7 +34,7 @@ class KiyaAPI:
 
         gazu.set_host(self._address)
         self.gazu = gazu.log_in(self._id, self._password)
-        self.server_connection_controller = ServerConnetionController(self.gazu)
+        self.server_connection_controller = ServerConnetionController()
         self.server_connection_controller.server_connection_model.arrange_project_status(self.get_all_open_projects())
 
     def print_all_assets(self) -> list:
