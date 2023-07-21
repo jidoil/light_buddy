@@ -1,7 +1,6 @@
 from collections import OrderedDict
 import gazu
 from PySide2.QtCore import QObject, Signal
-
 from validations.properties import ValidateID
 
 
@@ -40,3 +39,4 @@ class ServerConnectionModel(QObject):
                 else:
                     pass
         self.login_dataChanged.emit({"id": self._id, "password": self._password})
+
