@@ -176,6 +176,7 @@ class UIServerConnection(object):
         self.retranslateUi(server_connection_widget)
 
         self.tab_widget.setCurrentIndex(0)
+        self.password_line_edit.setEchoMode(QLineEdit.Password)
 
 
         QMetaObject.connectSlotsByName(server_connection_widget)
