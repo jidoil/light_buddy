@@ -1,9 +1,7 @@
-from PySide2 import QtCore
-from PySide2.QtCore import QAbstractTableModel
-
+from PySide2.QtCore import Qt, QAbstractTableModel
 
 class TasksModel(QAbstractTableModel):
-    def __init__(self, data, header_data, parent=None):
+    def __init__(self,data, header_data, parent=None):
         super(TasksModel, self).__init__(parent)
         self._data = data
         self._header_data = header_data
@@ -21,13 +19,13 @@ class TasksModel(QAbstractTableModel):
         row = index.row()
         col = index.column()
 
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             return str(self._data[row][col])
 
         return None
 
     def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return str(self._header_data[section])
 
         return None

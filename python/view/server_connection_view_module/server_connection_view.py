@@ -5,6 +5,8 @@ from PySide2.QtWidgets import QMainWindow, QTableWidgetItem, \
 
 from view.server_connection_view_module.ui_server_connection import UIServerConnection
 
+from model.tasks_model import TasksModel
+
 
 class ServerConnectionView(QMainWindow, UIServerConnection):
     id_and_passwordRecieved = Signal(dict)
@@ -20,6 +22,7 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
         self.log_in_button.clicked.connect(self.on_login_button_clicked)
         self.sync_all_assets_button.clicked.connect(self.sync_button_clicked)
         self.import_assets_button.clicked.connect(self.import_assets_button_clicked)
+        self.scene_asset_list_model = None
 
     def add_row(self, projects):
         for project_index, project in enumerate(projects):
@@ -29,7 +32,17 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
                 item.setTextAlignment(Qt.AlignCenter)
                 self.server_list_view.setItem(project_index, element_index_in_project, item)
 
-
+    def sync_assets(self, tasks):
+        data = []
+        for task_idx, task in enumerate(tasks):
+            if task["task_type_name"] == "Lighting":
+                data.append([task["sequence_name"] + " " + task["entity_name"]])  # 2차원 리스트로 변경
+        if not self.scene_asset_list_model:
+            self.tasks_model = TasksModel(data, ["에셋 이름"])
+            self.scene_asset_list_view.setModel(self.tasks_model)
+        else:
+            self.tasks_model = TasksModel(data, ["에셋 이름"])
+            self.scene_asset_list_view.setModel(self.tasks_model)
 
     def on_login_button_clicked(self):
         if not self._isLoggedIn:
