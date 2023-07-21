@@ -20,7 +20,7 @@ class ServerConnetionController:
         self.server_connection_model.server_statsChanged.connect(self.update_table)
         self.server_connection_view.id_and_passwordRecieved.connect(self.log_in_to_project)
         self.server_connection_view.isLoggedIn.connect(self.log_in_controll)
-
+        self.server_connection_view.sync_button_pushed.connect(self.sync_asset)
 
     def log_in_to_project(self, valid_login_data: dict) -> None:
         self._id = valid_login_data["id"]
@@ -46,13 +46,18 @@ class ServerConnetionController:
         # self.sequences = self.gz.shot.all_sequences_for_project(project)
         self.sync_asset(self.tasks)
 
-    def sync_asset(self, tasks):
+    def sync_asset(self, tasks: list = []):
         data = []
+        if not tasks:
+            print("no tasks")
+            tasks = self.get_tasks()
+            print("tasks: ", tasks)
+
         for task in tasks:
             if task["task_type_name"] == "Lighting":
                 data.append([task["sequence_name"] + " " + task["entity_name"]])
-
         header_data = ["에셋 이름"]
+
         if not self.tasks_model:
             self.tasks_model = TasksModel(data, header_data)
             self.server_connection_view.scene_asset_list_view.setModel(self.tasks_model)
@@ -64,11 +69,14 @@ class ServerConnetionController:
             self.server_connection_view.regenerate_log_in_form()
             self.gz = None
             print("log out suceeded!")
+
     def auth_login(self, login_form_data: dict) -> None:
         self.server_connection_model.auth_login(login_form_data)
 
     def update_table(self, server_stats):
         self.server_connection_view.add_row(server_stats)
 
-    def get_tasks(self):
-        self.tasks_model = TasksModel("dummy data", "dummy_header")
+    def get_tasks(self) -> list:
+        self.person = gazu.person.get_person(self.res["user"]["id"])
+        self.tasks = gazu.task.all_tasks_for_person(self.person)
+        return self.tasks

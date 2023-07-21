@@ -5,7 +5,6 @@ from PySide2.QtWidgets import QMainWindow, QTableWidgetItem, \
 
 from view.server_connection_view_module.ui_server_connection import UIServerConnection
 
-from model.tasks_model import TasksModel
 
 
 class ServerConnectionView(QMainWindow, UIServerConnection):
@@ -13,6 +12,7 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
     isLoggedIn = Signal(bool)
     _isLoggedIn = None
     assigned_assets = []
+    sync_button_pushed = Signal()
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -65,7 +65,7 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
         self.password_line_edit.hide()
 
     def sync_button_clicked(self):
-        print("sync clicked")
+        self.sync_button_pushed.emit()
 
     def import_assets_button_clicked(self):
         print("import clicked")
