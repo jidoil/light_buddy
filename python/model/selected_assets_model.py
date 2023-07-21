@@ -1,10 +1,10 @@
 from PySide2.QtCore import Qt, QAbstractTableModel
 
-class TasksModel(QAbstractTableModel):
-    def __init__(self,data, header_data, parent=None):
-        super(TasksModel, self).__init__(parent)
+class SelectedAssetModel(QAbstractTableModel):
+    def __init__(self, parent=None):
+        super(SelectedAssetModel, self).__init__(parent)
         self._data = []
-        self._header_data = []
+        self._header_data = ["선택한 에셋"]
 
     def rowCount(self, parent=None):
         return len(self._data)
@@ -27,11 +27,13 @@ class TasksModel(QAbstractTableModel):
     def headerData(self, section, orientation, role):
         if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return str(self._header_data[section])
-
         return None
 
-    def updateData(self, assets, header_data):
+    def updateData(self, data: list, header_data: list) -> None:  # TODO: data가 캐릭터로 쪼개져서 테이블로 등록되는 현생
         self.beginResetModel()
-        self._data = assets
+        for d in data:
+            self._data.append(d)
+            print(self._data)
+        self._data = data
         self._header_data = header_data
         self.endResetModel()
