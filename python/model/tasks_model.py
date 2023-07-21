@@ -29,3 +29,9 @@ class TasksModel(QAbstractTableModel):
             return str(self._header_data[section])
 
         return None
+
+    def updateData(self, data, header_data):
+        self.beginResetModel()
+        self._data = data
+        self._header_data = header_data
+        self.endResetModel()
