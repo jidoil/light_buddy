@@ -16,6 +16,7 @@ class ServerConnetionController:
     tasks_model = None
     selected_asset_model = None
     selected_assets = set()
+
     def __init__(self):
         self.server_connection_model = ServerConnectionModel()
         self.server_connection_view = ServerConnectionView()  # 현재 열려있는 프로젝트와 에셋,샷 그리고 활동중인 아티스트의 수를 보여줍니다.
@@ -25,6 +26,7 @@ class ServerConnetionController:
         self.server_connection_view.isLoggedIn.connect(self.log_in_controll)
         self.server_connection_view.sync_button_pushed.connect(self.sync_asset)
         self.server_connection_view.add_selected_asset_button_pushed.connect(self.add_selected_asset_to_import_list)
+
     def add_selected_asset_to_import_list(self):
         print("asset added to import list!")
         selected_indexes = self.server_connection_view.scene_asset_list_view.selectionModel().selectedIndexes()
