@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 __author__ = "Ji Doil"
 __credits__ = ["Ji Doil"]
-__lisence__ = "BSD"
+__lisence__ = ""
 __maintainer__ = "Ji Doil"
 __email__ = "dotteda@gmail.com"
 __status__ = "Development"
