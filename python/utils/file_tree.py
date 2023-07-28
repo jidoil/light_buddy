@@ -42,4 +42,5 @@ class FileTree:
                     if os.path.exists(path):
                         print(f"deleting useless path: {path} ")
                         os.rmdir(path)
+
             os.makedirs(path)
