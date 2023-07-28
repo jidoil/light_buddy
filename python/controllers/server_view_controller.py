@@ -16,6 +16,8 @@ class ServerConnetionController:
     tasks_model = None
     selected_asset_model = None
     selected_assets = set()
+    assigned_shots = []
+    tasks_names = []
 
     def __init__(self):
         self.server_connection_model = ServerConnectionModel()
@@ -26,19 +28,96 @@ class ServerConnetionController:
         self.server_connection_view.isLoggedIn.connect(self.log_in_controll)
         self.server_connection_view.sync_button_pushed.connect(self.sync_asset)
         self.server_connection_view.add_selected_asset_button_pushed.connect(self.add_selected_asset_to_import_list)
+        self.server_connection_view.remove_selected_asset_button_pushed.connect(self.remove_selected_asset_from_import_list)
+        self.server_connection_view.add_all_assets_button_pushed.connect(self.add_all_assigned_assets_to_import_list)
+        self.server_connection_view.remove_all_assets_button_pushed.connect(self.remove_all_assets)
+
+    def remove_all_assets(self):
+        if self.selected_assets:
+            self.selected_assets = set()
+        header_data = None
+
+        self.selected_asset_model.updateData(None, None)
+
+    def add_all_assigned_assets_to_import_list(self):
+        list_converted_assets = []
+
+        model = self.server_connection_view.scene_asset_list_view.model()
+
+        for row in range(model.rowCount()):
+            for column in range(model.columnCount()):
+                index = model.index(row, column)
+                data = index.data(Qt.DisplayRole)
+                self.selected_assets.add(data)
+        for asset in self.selected_assets:
+            list_converted_assets.append([asset])
+
+        header_data = ["선택한 에셋"]
+        self.selected_asset_model.updateData(list_converted_assets, header_data)
 
     def add_selected_asset_to_import_list(self):
+        list_converted_assets = []
         print("asset added to import list!")
         selected_indexes = self.server_connection_view.scene_asset_list_view.selectionModel().selectedIndexes()
         print(selected_indexes)
         for index in selected_indexes:
             row = index.row()
             column = index.column()
-            # 해당 행과 열의 값을 가져올 수 있습니다.
             data = index.data(Qt.DisplayRole)
             print(f"Row: {row}, Column: {column}, Data: {data}")
             self.selected_assets.add(data)
-        self.selected_asset_model.updateData(list(self.selected_assets), ["선택한 에셋"])
+
+        for asset in self.selected_assets:
+            list_converted_assets.append([asset])
+
+        header_data = ["선택한 에셋"]
+        print("selected assets: ", list_converted_assets)
+        print("header_data: ", header_data)
+        self.selected_asset_model.updateData(list_converted_assets, header_data)
+
+    def remove_selected_asset_from_import_list(self):
+        list_converted_assets = []
+        print("asset removed from import list!")
+        selected_indexes = self.server_connection_view.assets_to_import_list_view.selectionModel().selectedIndexes()
+        print(selected_indexes)
+        for index in selected_indexes:
+            row = index.row()
+            column = index.column()
+            data = index.data(Qt.DisplayRole)
+            print(f"Row: {row}, Column: {column}, Data: {data}")
+            self.selected_assets.remove(data)
+
+        for asset in self.selected_assets:
+            list_converted_assets.pop([asset])
+
+        header_data = ["선택한 에셋"]
+        print("selected assets: ", list_converted_assets)
+        print("header_data: ", header_data)
+        self.selected_asset_model.updateData(list_converted_assets, header_data)
+
+    def sync_asset(self, tasks: list = []) -> None:
+        if self.assigned_shots:
+            return
+        if not tasks:
+            print("no tasks")
+            tasks = self.get_tasks()
+            print("tasks: ", tasks)
+
+        for task in tasks:
+            if task["task_type_name"] == "Lighting":
+                self.assigned_shots.append([task["sequence_name"] + " " + task["entity_name"]])
+        header_data = ["에셋 이름"]
+
+        if not self.tasks_model:
+            self.tasks_model = TasksModel(self.assigned_shots, header_data)
+            self.server_connection_view.scene_asset_list_view.setModel(self.tasks_model)
+            self.selected_asset_model = SelectedAssetModel()
+            self.server_connection_view.assets_to_import_list_view.setModel(self.selected_asset_model)
+        else:
+            self.tasks_model.updateData(self.assigned_shots, header_data)
+        print("assigned shots: ", self.assigned_shots)
+        print("as header_data: ", header_data)
+
 
     def log_in_to_project(self, valid_login_data: dict) -> None:
         self._id = valid_login_data["id"]
@@ -57,41 +136,18 @@ class ServerConnetionController:
             print("login: false")
 
     def gazu_init(self) -> None:
-        self.person = gazu.person.get_person(self.res["user"]["id"])
-        self.tasks = gazu.task.all_tasks_for_person(self.person)
-        self.tasks_names = []
+        # self.person = gazu.person.get_person(self.res["user"]["id"])
+        # self.tasks = gazu.task.all_tasks_for_person(self.person)
+        tasks = self.get_tasks()
+        self.sync_asset(tasks)
         self.projects = gazu.project.all_open_projects()
-        # self.sequences = self.gz.shot.all_sequences_for_project(project)
-        self.sync_asset(self.tasks)
 
-    def sync_asset(self, tasks: list = []) -> None:
-        self.assigned_shots = []
-        if not tasks:
-            print("no tasks")
-            tasks = self.get_tasks()
-            print("tasks: ", tasks)
 
-        for task in tasks:
-            if task["task_type_name"] == "Lighting":
-                self.assigned_shots.append([task["sequence_name"] + " " + task["entity_name"]])
-        header_data = ["에셋 이름"]
-
-        if not self.tasks_model:
-            self.tasks_model = TasksModel(self.assigned_shots, header_data)
-            self.server_connection_view.scene_asset_list_view.setModel(self.tasks_model)
-            self.selected_asset_model = SelectedAssetModel()
-            self.server_connection_view.assets_to_import_list_view.setModel(self.selected_asset_model)
-        else:
-            self.tasks_model.updateData(self.assigned_shots, header_data)
-
-    def log_in_controll(self, data) -> None:
-        if not data:
+    def log_in_controll(self, is_logged_in : bool) -> None:
+        if not is_logged_in:
             self.server_connection_view.regenerate_log_in_form()
             self.gz = None
             print("log out suceeded!")
-
-    def auth_login(self, login_form_data: dict) -> None:
-        self.server_connection_model.auth_login(login_form_data)
 
     def update_table(self, server_stats) -> None:
         self.server_connection_view.add_row(server_stats)

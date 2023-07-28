@@ -1,10 +1,10 @@
 from PySide2.QtCore import Qt, QAbstractTableModel
 
 class TasksModel(QAbstractTableModel):
-    def __init__(self,data, header_data, parent=None):
+    def __init__(self, data, header_data, parent=None):
         super(TasksModel, self).__init__(parent)
-        self._data = []
-        self._header_data = []
+        self._data = data
+        self._header_data = header_data
 
     def rowCount(self, parent=None):
         return len(self._data)
@@ -27,7 +27,6 @@ class TasksModel(QAbstractTableModel):
     def headerData(self, section, orientation, role):
         if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return str(self._header_data[section])
-
         return None
 
     def updateData(self, assets, header_data):

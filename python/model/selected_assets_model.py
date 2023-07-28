@@ -7,9 +7,13 @@ class SelectedAssetModel(QAbstractTableModel):
         self._header_data = ["선택한 에셋"]
 
     def rowCount(self, parent=None):
+        if not self._data:
+            return None
         return len(self._data)
 
     def columnCount(self, parent=None):
+        if not self._data:
+            return None
         return len(self._data[0]) if self.rowCount() > 0 else 0
 
     def data(self, index, role):
@@ -29,11 +33,8 @@ class SelectedAssetModel(QAbstractTableModel):
             return str(self._header_data[section])
         return None
 
-    def updateData(self, data: list, header_data: list) -> None:  # TODO: data가 캐릭터로 쪼개져서 테이블로 등록되는 현생
+    def updateData(self, data, header_data):
         self.beginResetModel()
-        for d in data:
-            self._data.append(d)
-            print(self._data)
         self._data = data
         self._header_data = header_data
         self.endResetModel()

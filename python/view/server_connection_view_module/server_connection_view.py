@@ -13,7 +13,9 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
     selected_assets = []
     sync_button_pushed = Signal()
     add_selected_asset_button_pushed = Signal()
-
+    remove_selected_asset_button_pushed = Signal()
+    add_all_assets_button_pushed = Signal()
+    remove_all_assets_button_pushed = Signal()
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -23,14 +25,27 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
         self.server_list_view.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.log_in_button.clicked.connect(self.on_login_button_clicked)
         self.sync_all_assets_button.clicked.connect(self.sync_button_clicked)
-        self.import_assets_button.clicked.connect(self.import_assets_button_clicked)
+        # self.import_assets_button.clicked.connect(self.import_assets_button_clicked)
         self.add_select_asset_button.clicked.connect(self.on_add_select_asset_button_clicked)
         self.assets_to_import_list_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.remove_asset_from_import_list_button.clicked.connect(self.on_remove_asset_button_clicked)
+        self.add_all_assets_button.clicked.connect(self.on_add_all_assets_button_clicked)
+        self.remove_all_assets_from_import_list_button.clicked.connect(self.on_remove_all_assets_button_clicked)
 
+    def on_remove_all_assets_button_clicked(self):
+        print("remove all assets cliced")
+        self.remove_all_assets_button_pushed.emit()
+    def on_add_all_assets_button_clicked(self):
+        print("add al assets clicked")
+        self.add_all_assets_button_pushed.emit()
 
     def on_add_select_asset_button_clicked(self):
         print("add select clicked")
         self.add_selected_asset_button_pushed.emit()
+
+    def on_remove_asset_button_clicked(self):
+        print("remove asset clicked")
+        self.remove_selected_asset_button_pushed.emit()
 
     def add_row(self, projects) -> None:
         for project_index, project in enumerate(projects):
@@ -63,6 +78,7 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
         self.password_line_edit.show()
         self.log_in_button.setText("Connect")
         self._isLoggedIn = False
+
     def log_in_succeed(self) -> None:
         self._isLoggedIn = True
         print("login succeeded!")
@@ -75,12 +91,3 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
 
     def import_assets_button_clicked(self) -> None:
         self.add_selected_asset_button_pushed.emit()
-# 핵심 코드를 찾는다. 이런 기능이 필요해 저런기능이 필요해
-# 그함수들을 찾아서 테스트를 한뒤 구조화
-# 객체로 쪼갠다든지
-# 인자값, ui 로받을건지 씬에서추출해서 받을건지 그런걸 정리하면서 큰 구조를 찾는다.
-# 처음부터 큰구조를 짜는것보다는 작은것부터 짜고 테스트하고 만든다.
-# 문제해결할때 작은단위부터 추가추가 해서
-# 반대로하면 힘들어져
-# 마야는 문서보는게 좋다.
-# chatgpt한테 물어보고...

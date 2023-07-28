@@ -28,15 +28,3 @@ class ServerConnectionModel(QObject):
                 self.server_stats.append(data_for_server_view_table)
 
         self.server_statsChanged.emit(self.server_stats)
-
-    def auth_login(self, login_form_data):
-        if isinstance(login_form_data, dict):
-            for key, value in login_form_data.items():
-                if key == "id":
-                    self._id = value
-                elif key == "password":
-                    self._password = value
-                else:
-                    pass
-        self.login_dataChanged.emit({"id": self._id, "password": self._password})
-
