@@ -7,6 +7,7 @@ from validations.properties import ValidateID
 class ServerConnectionModel(QObject):
     server_statsChanged = Signal(list)
     login_dataChanged = Signal(dict)
+
     def __init__(self):
         super().__init__()
         self.server_stats = []

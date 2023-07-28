@@ -6,6 +6,8 @@ from model.server_connection_model import ServerConnectionModel
 from model.tasks_model import TasksModel
 from model.selected_assets_model import SelectedAssetModel
 
+from python.utils.file_tree import FileTree
+
 
 class ServerConnetionController:
     gz = None
@@ -31,11 +33,27 @@ class ServerConnetionController:
         self.server_connection_view.remove_selected_asset_button_pushed.connect(self.remove_selected_asset_from_import_list)
         self.server_connection_view.add_all_assets_button_pushed.connect(self.add_all_assigned_assets_to_import_list)
         self.server_connection_view.remove_all_assets_button_pushed.connect(self.remove_all_assets)
+        self.server_connection_view.import_assets_button_pushed.connect(self.import_assets)
+
+    def import_assets(self):
+        print("import asset button clicked")
+        if not self.selected_assets:
+            print("you have no tasks to import")
+            return
+
+        self.selected_tasks = []
+        for task in self.tasks:
+            if "%s %s" % (task['entity_name'], task['sequence_name']) in self.selected_assets:
+                print("%s %s" % (task['entity_name'], task['sequence_name']))
+                self.selected_tasks.append(task)
+
+        self.file_tree = FileTree()
+        for project in self.projects:
+            self.file_tree.initialize_selected_files_file_tree(project, self.selected_tasks)
 
     def remove_all_assets(self):
         if self.selected_assets:
             self.selected_assets = set()
-        header_data = None
 
         self.selected_asset_model.updateData(None, None)
 
@@ -118,7 +136,6 @@ class ServerConnetionController:
         print("assigned shots: ", self.assigned_shots)
         print("as header_data: ", header_data)
 
-
     def log_in_to_project(self, valid_login_data: dict) -> None:
         self._id = valid_login_data["id"]
         self._password = valid_login_data["password"]
@@ -141,7 +158,6 @@ class ServerConnetionController:
         tasks = self.get_tasks()
         self.sync_asset(tasks)
         self.projects = gazu.project.all_open_projects()
-
 
     def log_in_controll(self, is_logged_in : bool) -> None:
         if not is_logged_in:

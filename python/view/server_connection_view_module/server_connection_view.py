@@ -16,6 +16,8 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
     remove_selected_asset_button_pushed = Signal()
     add_all_assets_button_pushed = Signal()
     remove_all_assets_button_pushed = Signal()
+    import_assets_button_pushed = Signal()
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -25,16 +27,17 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
         self.server_list_view.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.log_in_button.clicked.connect(self.on_login_button_clicked)
         self.sync_all_assets_button.clicked.connect(self.sync_button_clicked)
-        # self.import_assets_button.clicked.connect(self.import_assets_button_clicked)
         self.add_select_asset_button.clicked.connect(self.on_add_select_asset_button_clicked)
         self.assets_to_import_list_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.remove_asset_from_import_list_button.clicked.connect(self.on_remove_asset_button_clicked)
         self.add_all_assets_button.clicked.connect(self.on_add_all_assets_button_clicked)
         self.remove_all_assets_from_import_list_button.clicked.connect(self.on_remove_all_assets_button_clicked)
+        self.import_assets_button.clicked.connect(self.import_assets_button_clicked)
 
     def on_remove_all_assets_button_clicked(self):
         print("remove all assets cliced")
         self.remove_all_assets_button_pushed.emit()
+
     def on_add_all_assets_button_clicked(self):
         print("add al assets clicked")
         self.add_all_assets_button_pushed.emit()
@@ -90,4 +93,4 @@ class ServerConnectionView(QMainWindow, UIServerConnection):
         self.sync_button_pushed.emit()
 
     def import_assets_button_clicked(self) -> None:
-        self.add_selected_asset_button_pushed.emit()
+        self.import_assets_button_pushed.emit()
