@@ -1,5 +1,6 @@
 from PySide2.QtCore import Qt, QAbstractTableModel
 
+
 class SelectedAssetModel(QAbstractTableModel):
     def __init__(self, parent=None):
         super(SelectedAssetModel, self).__init__(parent)
@@ -8,17 +9,17 @@ class SelectedAssetModel(QAbstractTableModel):
 
     def rowCount(self, parent=None):
         if not self._data:
-            return None
+            return 0
         return len(self._data)
 
     def columnCount(self, parent=None):
         if not self._data:
-            return None
+            return 0
         return len(self._data[0]) if self.rowCount() > 0 else 0
 
     def data(self, index, role):
         if not index.isValid():
-            return None
+            return 0
 
         row = index.row()
         col = index.column()

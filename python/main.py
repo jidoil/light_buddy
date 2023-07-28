@@ -14,5 +14,6 @@ subprocess.call(rez_env_command, shell=True)
     gz.print_all_open_projects()
     sys.exit(app.exec_())
 
+
 if __name__ == "__main__":
     main()
